@@ -103,6 +103,8 @@ def report(policies, start_date, options, output_fh, raw_output_fh=None):
         writer.writerows(rows)
     elif options.format == 'json':
         print(dumps(records, indent=2))
+    elif options.format == 'jsonl':
+        print(dumps(records, indent=2, lines=True))
     else:
         # We special case CSV, and for other formats we pass to tabulate
         print(tabulate(rows, formatter.headers(), tablefmt=options.format))
