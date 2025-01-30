@@ -56,7 +56,8 @@ class HandleTest(BaseTest):
              'regions': ['us-east-1'],
              'cache_period': 0,
              'log_group': None,
-             'metrics': None})
+             'metrics': None,
+             'policy_format': "json"})
 
     def setupLambdaEnv(
             self, policy_data, environment=None, err_execs=(),

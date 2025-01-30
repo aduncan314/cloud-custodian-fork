@@ -95,18 +95,19 @@ def loads(body):
 
 def dumps(data, fh=None, indent=0, lines=False):
     if lines:
-        _dump_lines(data, fh, indent)
+        # TODO: Warn if indent > 0?
+        return _dump_lines(data, fh)
     if fh:
         return json.dump(data, fh, cls=JsonEncoder, indent=indent)
     else:
         return json.dumps(data, cls=JsonEncoder, indent=indent)
 
 
-def _dump_lines(data, fh, indent):
+def _dump_lines(data, fh):
     if not isinstance(data, list) or not isinstance(data, tuple):
         raise TypeError(f'Expected a list or tuple but found {type(data)}')
 
-    jsonl_str = "\n".join(json.dumps(data_line, indent=indent) for data_line in data)
+    jsonl_str = "\n".join(json.dumps(data_line, indent=0) for data_line in data)
 
     if fh:
         return fh.write(jsonl_str)

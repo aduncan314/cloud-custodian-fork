@@ -104,6 +104,8 @@ def _default_options(p, exclude=[]):
                        action=LoadSessionPolicyJson,
                        help="[OPTIONAL] AWS IAM Policy Document to be used as a session policy")
 
+    p.add_argument("--policy-format", dest="policy_format", choices=['json', 'jsonl'], default='json')
+
 
 def _report_options(p):
     """ Add options specific to the report subcommand. """
@@ -224,9 +226,11 @@ def setup_parser():
         help="Execute the policies in a config file",
         formatter_class=argparse.RawDescriptionHelpFormatter)
 
+# TODO: HERE IS THE RUN COMMAND
     run.set_defaults(command="c7n.commands.run")
     _default_options(run)
     _dryrun_option(run)
+
     run.add_argument(
         "--skip-validation",
         action="store_true",

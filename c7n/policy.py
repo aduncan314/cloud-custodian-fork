@@ -221,7 +221,7 @@ class PolicyExecutionMode:
     POLICY_METRICS = ('ResourceCount', 'ResourceTime', 'ActionTime')
     permissions = ()
 
-    def __init__(self, policy):
+    def __init__(self, policy: 'Policy'):
         self.policy = policy
 
     def run(self, event=None, lambda_context=None):
@@ -537,7 +537,8 @@ class LambdaMode(ServerlessExecutionMode):
                     "Invoking actions %s", self.policy.resource_manager.actions
                 )
 
-            ctx.output.write_file('resources.json', utils.dumps(resources, indent=2))
+            dumps_kwargs = self._get_dump_kwargs()
+            ctx.output.write_file('resources.json', utils.dumps(resources, **dumps_kwargs))
 
             for action in self.policy.resource_manager.actions:
                 self.policy.log.info(
@@ -588,6 +589,15 @@ class LambdaMode(ServerlessExecutionMode):
                 self.policy_lambda(self.policy),
                 role=self.policy.options.assume_role)
 
+    def _get_dump_kwargs(self) -> dict:
+        if self.policy.options.policy_format == 'jsonl':
+            # TODO: for jsonl
+            kwargs = {"lines": True}
+        elif self.policy.options.policy_format == 'json':
+            kwargs = {"indent": 2}
+        else:
+            raise ValueError("Unknown format: %s" % self.policy.options.format)
+        return kwargs
 
 @execution.register('periodic')
 class PeriodicMode(LambdaMode, PullMode):
