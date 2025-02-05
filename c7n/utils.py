@@ -95,7 +95,8 @@ def loads(body):
 
 def dumps(data, fh=None, indent=0, lines=False):
     if lines:
-        # TODO: Warn if indent > 0?
+        if indent > 0:
+            log.warning(f"Writing JSONL with indent = {indent} may cause issues reading JSONL.")
         return _dump_lines(data, fh)
     if fh:
         return json.dump(data, fh, cls=JsonEncoder, indent=indent)

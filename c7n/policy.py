@@ -599,6 +599,7 @@ class LambdaMode(ServerlessExecutionMode):
             raise ValueError("Unknown format: %s" % self.policy.options.format)
         return kwargs
 
+
 @execution.register('periodic')
 class PeriodicMode(LambdaMode, PullMode):
     """A policy that runs in pull mode within lambda.
